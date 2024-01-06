@@ -1,15 +1,16 @@
 import * as THREE from "three";
 
-export default function createPlanet(size, texture, position, ring) {
+export default function createPlanet(name, size, texture, position, ring) {
   const geometry = new THREE.SphereGeometry(size, 25, 20);
   const material = new THREE.MeshStandardMaterial({
     map: new THREE.TextureLoader().load(texture),
   });
   const planet = new THREE.Mesh(geometry, material);
+  planet.name = name;
   const planetObj = new THREE.Object3D();
   planetObj.add(planet);
   planetObj.receiveShadow = true;
-  // scene.add(planetObj);
+
   planet.position.x = position;
 
   if (ring) {
