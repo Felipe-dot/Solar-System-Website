@@ -12,6 +12,7 @@ import saturnRingTexture from "/saturn ring.png";
 import uranusTexture from "/uranus.jpg";
 import uranusRingTexture from "/uranus ring.png";
 import neptuneTexture from "/neptune.jpg";
+import moonTexture from "/moon.jpg";
 import starsTexture from "/stars.jpg";
 
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
@@ -60,6 +61,7 @@ const sunGeo = new THREE.SphereGeometry(12, 25, 20);
 const sunMat = new THREE.MeshBasicMaterial({
   map: textureload.load(sunTexture),
 });
+
 const sun = new THREE.Mesh(sunGeo, sunMat);
 scene.add(sun);
 
@@ -69,20 +71,23 @@ scene.add(pointLight);
 // Adicionando planetas
 const mercury = new createPlanet(4, mercuryTexture, 20);
 const venus = new createPlanet(5, venusTexture, 40);
-const earth = new createPlanet(5.56, earthTexture, 60);
-const mars = new createPlanet(5, marsTexture, 80);
-const jupiter = new createPlanet(6, jupiterTexture, 100);
-const saturn = new createPlanet(8, saturnTexture, 150, {
+const moon = new createPlanet(3.5, moonTexture, 15);
+const earth = new createPlanet(5.56, earthTexture, 75);
+const mars = new createPlanet(5, marsTexture, 100);
+const jupiter = new createPlanet(6, jupiterTexture, 120);
+const saturn = new createPlanet(8, saturnTexture, 160, {
   innerRadius: 10,
   outerRadius: 20,
   texture: saturnRingTexture,
 });
-const uranus = new createPlanet(8.2, uranusTexture, 200, {
+const uranus = new createPlanet(8.2, uranusTexture, 220, {
   innerRadius: 10,
   outerRadius: 20,
   texture: uranusRingTexture,
 });
-const neptune = new createPlanet(5, neptuneTexture, 240);
+const neptune = new createPlanet(5, neptuneTexture, 260);
+
+earth.planet.add(moon.planetObj);
 
 scene.add(
   mercury.planetObj,
@@ -103,6 +108,8 @@ function animate() {
   venus.planetObj.rotateY(0.0015);
   earth.planet.rotateY(0.012);
   earth.planetObj.rotateY(0.0012);
+  moon.planetObj.rotateY(0.01);
+  moon.planetObj.rotateX(0.001);
   mars.planet.rotateY(0.013);
   mars.planetObj.rotateY(0.0019);
   jupiter.planet.rotateY(0.04);
