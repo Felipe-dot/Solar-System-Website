@@ -8,6 +8,7 @@ export default function createPlanet(name, size, texture, position, ring) {
   const planet = new THREE.Mesh(geometry, material);
   planet.name = name;
   const planetObj = new THREE.Object3D();
+  planetObj.name = name;
   planetObj.add(planet);
   planetObj.receiveShadow = true;
 
