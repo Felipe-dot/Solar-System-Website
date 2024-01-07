@@ -56,13 +56,13 @@ scene.add(directionalLight);
 
 const textureload = new THREE.TextureLoader();
 
-var auraGeometry = new THREE.SphereGeometry(10, 32, 32);
-var auraMaterial = new THREE.MeshBasicMaterial({
-  color: 0x00ffff,
-  transparent: true,
-  opacity: 0.3,
-});
-var aura = new THREE.Mesh(auraGeometry, auraMaterial);
+// var auraGeometry = new THREE.SphereGeometry(10, 32, 32);
+// var auraMaterial = new THREE.MeshBasicMaterial({
+//   color: 0x00ffff,
+//   transparent: true,
+//   opacity: 0.3,
+// });
+// var aura = new THREE.Mesh(auraGeometry, auraMaterial);
 
 //sun
 const sunGeo = new THREE.SphereGeometry(12, 25, 20);
@@ -130,12 +130,62 @@ function animate() {
   // uranus.planetObj.rotateY(0.0015);
   // neptune.planet.rotateY(0.01);
   // neptune.planetObj.rotateY(0.001);
-  requestAnimationFrame(animate);
   renderer.render(scene, camera);
+  requestAnimationFrame(animate);
   orbit.update();
 }
 
 animate();
+
+function handlePlanetClick(planeta) {
+  // Remover todos os planetas da cena, exceto o planeta clicado
+  console.log(planeta);
+
+  var novosChildren = [];
+
+  scene.children.forEach(function (obj) {
+    // console.log(`${obj.name} || ${planeta.name}`);
+    if (obj.type === "Object3D" || obj.type === "Mesh") {
+      console.log(obj.name === planeta.name);
+      if (obj.name === planeta.name) {
+        // Manter o planeta clicado na nova matriz
+        novosChildren.push(obj);
+        console.log(novosChildren[0]);
+      } else {
+        // Remover outros objetos da cena
+        scene.remove(obj);
+      }
+    }
+  });
+
+  console.log(novosChildren);
+
+  scene.children = novosChildren;
+  scene.add(ambientLight);
+  scene.add(directionalLight);
+  // console.log(obj);
+  // // if (obj !== planeta) {
+  // // }
+
+  // Adicionar apenas o planeta clicado à cena
+
+  // scene.add(planeta);
+  // Ajustar a posição da câmera para exibir apenas o planeta clicado
+  // var newPosition = new THREE.Vector3(
+  //   planeta.position.x + 30,
+  //   planeta.position.y,
+  //   planeta.position.z
+  // );
+
+  // camera.position.copy(newPosition);
+  // camera.lookAt(planeta.position);
+
+  // Exibir informações detalhadas no lado direito
+  showPlanetInfo(planeta);
+}
+
+// Função para exibir informações detalhadas no lado direito
+function showPlanetInfo(planeta) {}
 
 function onMouseMove(event) {
   // Normalizar as coordenadas do mouse
@@ -155,17 +205,32 @@ function onMouseMove(event) {
     var selectedObject = intersects[0].object;
 
     console.log(selectedObject);
-    selectedObject.add(aura);
-  } else {
-    var selectedObject = intersects[0].object;
-    selectedObject.remove(aura);
-    // Nenhum objeto selecionado, esconder a aura
-    // aura.visible = false;
   }
 }
 
+var raycaster = new THREE.Raycaster();
+var mouse = new THREE.Vector2();
+function onMouseClick(event) {
+  // Atualizar as coordenadas do mouse
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+  // Configurar o raio a partir da câmera
+  raycaster.setFromCamera(mouse, camera);
+
+  // Verificar a interseção com os objetos da cena
+  var intersects = raycaster.intersectObjects(scene.children, true);
+
+  // Verificar se houve alguma interseção
+  if (intersects.length > 0) {
+    var selectedObject = intersects[0].object;
+    handlePlanetClick(selectedObject);
+  }
+}
+
+window.addEventListener("click", onMouseClick, false);
 // Adicionar o evento de passagem do mouse à janela
-window.addEventListener("mousemove", onMouseMove, false);
+// window.addEventListener("mousemove", onMouseMove, false);
 
 window.addEventListener("resize", function () {
   camera.aspect = window.innerWidth / window.innerHeight;
