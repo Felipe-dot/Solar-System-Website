@@ -64,7 +64,6 @@ const textureload = new THREE.TextureLoader();
 // });
 // var aura = new THREE.Mesh(auraGeometry, auraMaterial);
 
-//sun
 const sunGeo = new THREE.SphereGeometry(12, 25, 20);
 const sunMat = new THREE.MeshBasicMaterial({
   map: textureload.load(sunTexture),
@@ -110,26 +109,32 @@ scene.add(
   neptune.planetObj
 );
 
+var isFocusPlanet = true;
+
 function animate() {
-  // sun.rotateY(0.002);
-  // mercury.planet.rotateY(0.001);
-  // mercury.planetObj.rotateY(0.001);
-  // venus.planet.rotateY(0.0012);
-  // venus.planetObj.rotateY(0.0015);
-  // earth.planet.rotateY(0.012);
-  // earth.planetObj.rotateY(0.0012);
-  // moon.planetObj.rotateY(0.01);
-  // moon.planetObj.rotateX(0.001);
-  // mars.planet.rotateY(0.013);
-  // mars.planetObj.rotateY(0.0019);
-  // jupiter.planet.rotateY(0.04);
-  // jupiter.planetObj.rotateY(0.0023);
-  // saturn.planet.rotateY(0.01);
-  // saturn.planetObj.rotateY(0.0021);
-  // uranus.planet.rotateY(0.01);
-  // uranus.planetObj.rotateY(0.0015);
-  // neptune.planet.rotateY(0.01);
-  // neptune.planetObj.rotateY(0.001);
+  sun.rotateY(0.002);
+  earth.planet.rotateY(0.012);
+  mercury.planet.rotateY(0.001);
+  venus.planet.rotateY(0.0012);
+  mars.planet.rotateY(0.013);
+  jupiter.planet.rotateY(0.04);
+  saturn.planet.rotateY(0.01);
+  uranus.planet.rotateY(0.01);
+  neptune.planet.rotateY(0.01);
+  moon.planetObj.rotateX(0.001);
+
+  if (isFocusPlanet) {
+    mercury.planetObj.rotateY(0.001);
+    venus.planetObj.rotateY(0.0015);
+    earth.planetObj.rotateY(0.0012);
+    moon.planetObj.rotateY(0.01);
+    mars.planetObj.rotateY(0.0019);
+    jupiter.planetObj.rotateY(0.0023);
+    saturn.planetObj.rotateY(0.0021);
+    uranus.planetObj.rotateY(0.0015);
+    neptune.planetObj.rotateY(0.001);
+  }
+
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
   orbit.update();
@@ -142,10 +147,14 @@ function handlePlanetClick(planeta) {
   console.log(planeta);
 
   var novosChildren = [];
-
-  novosChildren = scene.children.filter((obj) => obj.name === planeta.name);
+  if (planeta.name == "Lua") {
+    novosChildren.push(moon.planetObj);
+  } else {
+    novosChildren = scene.children.filter((obj) => obj.name === planeta.name);
+  }
 
   scene.children = novosChildren;
+
   scene.add(ambientLight);
   scene.add(directionalLight);
   scene.add(pointLight);
@@ -159,6 +168,8 @@ function handlePlanetClick(planeta) {
 
   camera.position.copy(newPosition);
   camera.lookAt(planeta.position);
+
+  isFocusPlanet = false;
 
   // Exibir informações detalhadas no lado direito
   showPlanetInfo(planeta);
