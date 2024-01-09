@@ -1,0 +1,33 @@
+.planet_info__container {
+  padding: 50px;
+  background-color: purple;
+
+  border: 1px solid blue;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+
+  /* display: none; */
+}
+
+.planet_info__container > hr {
+  font-size: 20px;
+  width: 60px;
+  color: black;
+}
+
+.info__title {
+  display: flex;
+  justify-content: center;
+}
+
+.info__container {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.reset__button {
+  margin-top: 20px;
+}
