@@ -109,6 +109,7 @@ scene.add(
 );
 
 var isFocusPlanet = true;
+var isClickHappen = false;
 
 function animate() {
   sun.rotateY(0.002);
@@ -143,7 +144,7 @@ animate();
 
 function handlePlanetClick(planeta) {
   // Remover todos os planetas da cena, exceto o planeta clicado
-  console.log(planeta);
+  console.log(planeta.parent.children.length);
 
   var novosChildren = [];
   if (planeta.name == "Lua") {
@@ -162,13 +163,19 @@ function handlePlanetClick(planeta) {
   planeta.position.y = 0;
   planeta.position.z = 0;
 
+  var aux = 0;
+  if (planeta.parent.children.length == 2) {
+    planeta.parent.children[1].position.x = 0;
+    aux = 40;
+  }
+
   // Ajustar a posição da câmera para exibir apenas o planeta clicado
   // console.log("Posicao X" + planeta.position.x + 40);
   // console.log("Posicao Y" + planeta.position.y);
   // console.log("Posicao Z" + planeta.position.z);
   var newPosition = new THREE.Vector3(
     planeta.position.x + 40,
-    planeta.position.y,
+    planeta.position.y + aux,
     planeta.position.z
   );
 
@@ -207,25 +214,28 @@ function onMouseMove(event) {
   }
 }
 function onMouseClick(event) {
-  var raycaster = new THREE.Raycaster();
-  var mouse = new THREE.Vector2();
-  // Atualizar as coordenadas do mouse
-  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+  if (!isClickHappen) {
+    isClickHappen = true;
+    var raycaster = new THREE.Raycaster();
+    var mouse = new THREE.Vector2();
+    // Atualizar as coordenadas do mouse
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-  // Configurar o raio a partir da câmera
-  raycaster.setFromCamera(mouse, camera);
+    // Configurar o raio a partir da câmera
+    raycaster.setFromCamera(mouse, camera);
 
-  // Verificar a interseção com os objetos da cena
-  var intersects = raycaster.intersectObjects(scene.children, true);
+    // Verificar a interseção com os objetos da cena
+    var intersects = raycaster.intersectObjects(scene.children, true);
 
-  // Verificar se houve alguma interseção
-  if (intersects.length > 0) {
-    var selectedObject = intersects[0].object;
-    if (selectedObject.geometry.type === "RingGeometry") {
-      return;
-    } else {
-      handlePlanetClick(selectedObject);
+    // Verificar se houve alguma interseção
+    if (intersects.length > 0) {
+      var selectedObject = intersects[0].object;
+      if (selectedObject.geometry.type === "RingGeometry") {
+        return;
+      } else {
+        handlePlanetClick(selectedObject);
+      }
     }
   }
 }
