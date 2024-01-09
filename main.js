@@ -43,8 +43,7 @@ scene.background = cubeTextureLoader.load([
 
 const orbit = new OrbitControls(camera, renderer.domElement);
 camera.position.set(-90, 140, 140);
-camera.position.setZ(30);
-orbit.update();
+// camera.position.setZ(30);
 
 const ambientLight = new THREE.AmbientLight(0x404040, Math.PI);
 scene.add(ambientLight);
@@ -137,8 +136,8 @@ function animate() {
 
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
-  orbit.update();
 }
+orbit.update();
 
 animate();
 
@@ -148,7 +147,7 @@ function handlePlanetClick(planeta) {
 
   var novosChildren = [];
   if (planeta.name == "Lua") {
-    novosChildren.push(moon.planetObj);
+    novosChildren.push(planeta);
   } else {
     novosChildren = scene.children.filter((obj) => obj.name === planeta.name);
   }
@@ -159,7 +158,14 @@ function handlePlanetClick(planeta) {
   scene.add(directionalLight);
   scene.add(pointLight);
 
+  planeta.position.x = 0;
+  planeta.position.y = 0;
+  planeta.position.z = 0;
+
   // Ajustar a posição da câmera para exibir apenas o planeta clicado
+  // console.log("Posicao X" + planeta.position.x + 40);
+  // console.log("Posicao Y" + planeta.position.y);
+  // console.log("Posicao Z" + planeta.position.z);
   var newPosition = new THREE.Vector3(
     planeta.position.x + 40,
     planeta.position.y,
@@ -167,7 +173,9 @@ function handlePlanetClick(planeta) {
   );
 
   camera.position.copy(newPosition);
+
   camera.lookAt(planeta.position);
+  console.log(camera);
 
   isFocusPlanet = false;
 
@@ -198,10 +206,9 @@ function onMouseMove(event) {
     console.log(selectedObject);
   }
 }
-
-var raycaster = new THREE.Raycaster();
-var mouse = new THREE.Vector2();
 function onMouseClick(event) {
+  var raycaster = new THREE.Raycaster();
+  var mouse = new THREE.Vector2();
   // Atualizar as coordenadas do mouse
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -215,7 +222,11 @@ function onMouseClick(event) {
   // Verificar se houve alguma interseção
   if (intersects.length > 0) {
     var selectedObject = intersects[0].object;
-    handlePlanetClick(selectedObject);
+    if (selectedObject.geometry.type === "RingGeometry") {
+      return;
+    } else {
+      handlePlanetClick(selectedObject);
+    }
   }
 }
 
