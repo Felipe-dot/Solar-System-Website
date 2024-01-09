@@ -143,42 +143,22 @@ function handlePlanetClick(planeta) {
 
   var novosChildren = [];
 
-  scene.children.forEach(function (obj) {
-    // console.log(`${obj.name} || ${planeta.name}`);
-    if (obj.type === "Object3D" || obj.type === "Mesh") {
-      console.log(obj.name === planeta.name);
-      if (obj.name === planeta.name) {
-        // Manter o planeta clicado na nova matriz
-        novosChildren.push(obj);
-        console.log(novosChildren[0]);
-      } else {
-        // Remover outros objetos da cena
-        scene.remove(obj);
-      }
-    }
-  });
-
-  console.log(novosChildren);
+  novosChildren = scene.children.filter((obj) => obj.name === planeta.name);
 
   scene.children = novosChildren;
   scene.add(ambientLight);
   scene.add(directionalLight);
-  // console.log(obj);
-  // // if (obj !== planeta) {
-  // // }
+  scene.add(pointLight);
 
-  // Adicionar apenas o planeta clicado à cena
-
-  // scene.add(planeta);
   // Ajustar a posição da câmera para exibir apenas o planeta clicado
-  // var newPosition = new THREE.Vector3(
-  //   planeta.position.x + 30,
-  //   planeta.position.y,
-  //   planeta.position.z
-  // );
+  var newPosition = new THREE.Vector3(
+    planeta.position.x + 40,
+    planeta.position.y,
+    planeta.position.z
+  );
 
-  // camera.position.copy(newPosition);
-  // camera.lookAt(planeta.position);
+  camera.position.copy(newPosition);
+  camera.lookAt(planeta.position);
 
   // Exibir informações detalhadas no lado direito
   showPlanetInfo(planeta);
