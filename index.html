@@ -9,20 +9,25 @@
     <title>Interative Solar System</title>
   </head>
   <body>
-    <div class="planet_info__container">
+    <div class="planet_info__container" id="info_container">
       <div class="info__title">
-        <h2>Terra</h2>
+        <h2 id="planet_name"></h2>
       </div>
-      <div class="planet__description">
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sequi
-        delectus, aliquam adipisci consequuntur laborum quasi sint itaque quo
-        incidunt dolorum iure voluptates, soluta voluptate veritatis laudantium
-        nisi velit et molestiae!
-      </div>
+      <div class="planet__description" id="planet_description"></div>
       <hr />
       <div class="info__container">
-        <span>Diametro</span> <span>Orbita</span>
-        <span>Dia</span>
+        <div class="item">
+          <p>Diâmetro</p>
+          <p id="planet_diameter"></p>
+        </div>
+        <div class="item">
+          <p>Órbita</p>
+          <p id="planet_orbit"></p>
+        </div>
+        <div class="item">
+          <p>Dia</p>
+          <p id="planet_day"></p>
+        </div>
       </div>
       <div class="reset__button">
         <button type="button" id="reset">Resetar</button>
@@ -30,5 +35,6 @@
     </div>
     <div id="app"></div>
     <script type="module" src="/main.js"></script>
+    <script type="module" src="/planet_info.js"></script>
   </body>
 </html>
