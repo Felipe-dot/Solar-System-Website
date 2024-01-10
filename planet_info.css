@@ -1,14 +1,15 @@
 .planet_info__container {
   padding: 20px;
+  background-image: url("public/stars.jpg");
   background-color: purple;
-
-  border: 1px solid blue;
 
   display: flex;
   flex-direction: column;
   justify-content: start;
 
-  /* display: none; */
+  color: white;
+
+  display: none;
 }
 
 .planet_info__container > .planet__description {
@@ -39,4 +40,40 @@
   display: flex;
   justify-content: center;
   margin: 20px;
+}
+
+.reset__button > button {
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+  border-radius: 1rem;
+  width: 80px;
+  height: 30px;
+  text-transform: capitalize;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.reset__button > button:hover {
+  background-color: burlywood;
+  transition: 1s linear;
+}
+
+.item {
+  width: 100%;
+  max-width: 350px;
+  display: flex;
+  padding: 10px 10px 10px 0;
+}
+
+.item p {
+  margin: 0 5px;
+}
+
+.item p:first-child {
+  font-weight: 300;
+}
+
+.item p:last-child {
+  opacity: 0.4;
 }
