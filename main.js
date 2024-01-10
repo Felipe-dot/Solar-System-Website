@@ -15,6 +15,8 @@ import neptuneTexture from "/neptune.jpg";
 import moonTexture from "/moon.jpg";
 import starsTexture from "/stars.jpg";
 
+import showPlanetInfo from "./planet_info";
+
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 const renderer = new THREE.WebGLRenderer();
@@ -69,7 +71,7 @@ const sunMat = new THREE.MeshBasicMaterial({
 });
 
 const sun = new THREE.Mesh(sunGeo, sunMat);
-sun.name = "sol";
+sun.name = "Sol";
 scene.add(sun);
 
 const pointLight = new THREE.PointLight(0xffffff, 10, 1000);
@@ -144,7 +146,7 @@ animate();
 
 function handlePlanetClick(planeta) {
   // Remover todos os planetas da cena, exceto o planeta clicado
-  console.log(planeta.parent.children.length);
+  console.log(planeta);
 
   var novosChildren = [];
   if (planeta.name == "Lua") {
@@ -170,9 +172,6 @@ function handlePlanetClick(planeta) {
   }
 
   // Ajustar a posição da câmera para exibir apenas o planeta clicado
-  // console.log("Posicao X" + planeta.position.x + 40);
-  // console.log("Posicao Y" + planeta.position.y);
-  // console.log("Posicao Z" + planeta.position.z);
   var newPosition = new THREE.Vector3(
     planeta.position.x + 40,
     planeta.position.y + aux,
@@ -190,29 +189,29 @@ function handlePlanetClick(planeta) {
   showPlanetInfo(planeta);
 }
 
-// Função para exibir informações detalhadas no lado direito
-function showPlanetInfo(planeta) {}
+// var click = document.getElementById("reset");
 
-function onMouseMove(event) {
-  // Normalizar as coordenadas do mouse
-  var mouse = new THREE.Vector2();
-  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+// function onMouseMove(event) {
+//   // Normalizar as coordenadas do mouse
+//   var mouse = new THREE.Vector2();
+//   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+//   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-  // Configurar o raio a partir da câmera
-  var raycaster = new THREE.Raycaster();
-  raycaster.setFromCamera(mouse, camera);
-  // Verificar a interseção com os objetos da cena
-  var intersects = raycaster.intersectObjects(scene.children, true);
+//   // Configurar o raio a partir da câmera
+//   var raycaster = new THREE.Raycaster();
+//   raycaster.setFromCamera(mouse, camera);
+//   // Verificar a interseção com os objetos da cena
+//   var intersects = raycaster.intersectObjects(scene.children, true);
 
-  // Verificar se houve alguma interseção
-  if (intersects.length > 0) {
-    // Exibir o nome do objeto no console
-    var selectedObject = intersects[0].object;
+//   // Verificar se houve alguma interseção
+//   if (intersects.length > 0) {
+//     // Exibir o nome do objeto no console
+//     var selectedObject = intersects[0].object;
 
-    console.log(selectedObject);
-  }
-}
+//     console.log(selectedObject);
+//   }
+// }
+
 function onMouseClick(event) {
   if (!isClickHappen) {
     isClickHappen = true;
