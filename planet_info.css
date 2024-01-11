@@ -1,6 +1,6 @@
 .planet_info__container {
   padding: 20px;
-  background-image: url("public/stars.jpg");
+  background-image: url("/stars.jpg");
   background-color: purple;
 
   display: flex;
@@ -15,6 +15,7 @@
 .planet_info__container > .planet__description {
   margin: 20px;
   width: 200px;
+  text-align: justify;
 }
 
 .planet_info__container > hr {
