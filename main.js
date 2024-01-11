@@ -45,15 +45,15 @@ scene.background = cubeTextureLoader.load([
 
 const orbit = new OrbitControls(camera, renderer.domElement);
 camera.position.set(-90, 140, 140);
+
+const backupCamera = camera;
 // camera.position.setZ(30);
 
 const ambientLight = new THREE.AmbientLight(0x404040, Math.PI);
-scene.add(ambientLight);
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, Math.PI);
 directionalLight.position.set(5, 20, 10);
 directionalLight.castShadow = true;
-scene.add(directionalLight);
 
 const textureload = new THREE.TextureLoader();
 
@@ -72,10 +72,8 @@ const sunMat = new THREE.MeshBasicMaterial({
 
 const sun = new THREE.Mesh(sunGeo, sunMat);
 sun.name = "Sol";
-scene.add(sun);
 
 const pointLight = new THREE.PointLight(0xffffff, 10, 1000);
-scene.add(pointLight);
 
 // Adicionando planetas
 const mercury = new createPlanet("Mercúrio", 4, mercuryTexture, 20);
@@ -99,7 +97,11 @@ const neptune = new createPlanet("Netuno", 5, neptuneTexture, 260);
 
 earth.planet.add(moon.planetObj);
 
-scene.add(
+const backupScene = [
+  ambientLight,
+  directionalLight,
+  pointLight,
+  sun,
   mercury.planetObj,
   venus.planetObj,
   earth.planetObj,
@@ -107,8 +109,10 @@ scene.add(
   jupiter.planetObj,
   saturn.planetObj,
   uranus.planetObj,
-  neptune.planetObj
-);
+  neptune.planetObj,
+];
+
+backupScene.forEach((obj) => scene.add(obj));
 
 var isFocusPlanet = true;
 var isClickHappen = false;
@@ -146,7 +150,7 @@ animate();
 
 function handlePlanetClick(planeta) {
   // Remover todos os planetas da cena, exceto o planeta clicado
-  console.log(planeta);
+  // console.log(planeta);
 
   var novosChildren = [];
   if (planeta.name == "Lua") {
@@ -181,7 +185,7 @@ function handlePlanetClick(planeta) {
   camera.position.copy(newPosition);
 
   camera.lookAt(planeta.position);
-  console.log(camera);
+  // console.log(camera);
 
   isFocusPlanet = false;
 
@@ -189,28 +193,22 @@ function handlePlanetClick(planeta) {
   showPlanetInfo(planeta);
 }
 
-// var click = document.getElementById("reset");
+var resetClick = document.getElementById("reset");
 
-// function onMouseMove(event) {
-//   // Normalizar as coordenadas do mouse
-//   var mouse = new THREE.Vector2();
-//   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-//   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+var test = new THREE.Vector3();
+backupCamera.getWorldDirection(test);
 
-//   // Configurar o raio a partir da câmera
-//   var raycaster = new THREE.Raycaster();
-//   raycaster.setFromCamera(mouse, camera);
-//   // Verificar a interseção com os objetos da cena
-//   var intersects = raycaster.intersectObjects(scene.children, true);
+resetClick.addEventListener("click", () => {
+  var infoContainer = document.getElementById("info_container");
+  console.log(infoContainer);
+  isClickHappen = false;
+  isFocusPlanet = true;
+  infoContainer.style.display = "none";
 
-//   // Verificar se houve alguma interseção
-//   if (intersects.length > 0) {
-//     // Exibir o nome do objeto no console
-//     var selectedObject = intersects[0].object;
-
-//     console.log(selectedObject);
-//   }
-// }
+  backupScene.forEach((obj) => scene.add(obj));
+  camera.position.copy(backupCamera.position);
+  camera.lookAt(test);
+});
 
 function onMouseClick(event) {
   if (!isClickHappen) {
@@ -248,3 +246,24 @@ window.addEventListener("resize", function () {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
+
+// function onMouseMove(event) {
+//   // Normalizar as coordenadas do mouse
+//   var mouse = new THREE.Vector2();
+//   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+//   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+//   // Configurar o raio a partir da câmera
+//   var raycaster = new THREE.Raycaster();
+//   raycaster.setFromCamera(mouse, camera);
+//   // Verificar a interseção com os objetos da cena
+//   var intersects = raycaster.intersectObjects(scene.children, true);
+
+//   // Verificar se houve alguma interseção
+//   if (intersects.length > 0) {
+//     // Exibir o nome do objeto no console
+//     var selectedObject = intersects[0].object;
+
+//     console.log(selectedObject);
+//   }
+// }
