@@ -118,28 +118,28 @@ var isFocusPlanet = true;
 var isClickHappen = false;
 
 function animate() {
-  sun.rotateY(0.002);
-  earth.planet.rotateY(0.012);
-  mercury.planet.rotateY(0.001);
-  venus.planet.rotateY(0.0012);
-  mars.planet.rotateY(0.013);
-  jupiter.planet.rotateY(0.04);
-  saturn.planet.rotateY(0.01);
-  uranus.planet.rotateY(0.01);
-  neptune.planet.rotateY(0.01);
-  moon.planetObj.rotateX(0.001);
+  // sun.rotateY(0.002);
+  // earth.planet.rotateY(0.012);
+  // mercury.planet.rotateY(0.001);
+  // venus.planet.rotateY(0.0012);
+  // mars.planet.rotateY(0.013);
+  // jupiter.planet.rotateY(0.04);
+  // saturn.planet.rotateY(0.01);
+  // uranus.planet.rotateY(0.01);
+  // neptune.planet.rotateY(0.01);
+  // moon.planetObj.rotateX(0.001);
 
-  if (isFocusPlanet) {
-    mercury.planetObj.rotateY(0.001);
-    venus.planetObj.rotateY(0.0015);
-    earth.planetObj.rotateY(0.0012);
-    moon.planetObj.rotateY(0.01);
-    mars.planetObj.rotateY(0.0019);
-    jupiter.planetObj.rotateY(0.0023);
-    saturn.planetObj.rotateY(0.0021);
-    uranus.planetObj.rotateY(0.0015);
-    neptune.planetObj.rotateY(0.001);
-  }
+  // if (isFocusPlanet) {
+  //   mercury.planetObj.rotateY(0.001);
+  //   venus.planetObj.rotateY(0.0015);
+  //   earth.planetObj.rotateY(0.0012);
+  //   moon.planetObj.rotateY(0.01);
+  //   mars.planetObj.rotateY(0.0019);
+  //   jupiter.planetObj.rotateY(0.0023);
+  //   saturn.planetObj.rotateY(0.0021);
+  //   uranus.planetObj.rotateY(0.0015);
+  //   neptune.planetObj.rotateY(0.001);
+  // }
 
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
@@ -165,20 +165,16 @@ function handlePlanetClick(planeta) {
   scene.add(directionalLight);
   scene.add(pointLight);
 
-  planeta.position.x = 0;
-  planeta.position.y = 0;
-  planeta.position.z = 0;
-
-  var aux = 0;
-  if (planeta.parent.children.length == 2) {
-    planeta.parent.children[1].position.x = 0;
-    aux = 40;
-  }
+  // planeta.position.x = 0;
+  // planeta.position.y = 0;
+  // planeta.position.z = 0;
 
   // Ajustar a posição da câmera para exibir apenas o planeta clicado
   var newPosition = new THREE.Vector3(
     planeta.position.x + 40,
-    planeta.position.y + aux,
+    planeta.parent.children.length == 2
+      ? planeta.position.y + 40
+      : planeta.position.y + 0,
     planeta.position.z
   );
 
@@ -195,24 +191,30 @@ function handlePlanetClick(planeta) {
 
 var resetClick = document.getElementById("reset");
 
-var test = new THREE.Vector3();
-backupCamera.getWorldDirection(test);
-
 resetClick.addEventListener("click", () => {
+  event.stopPropagation();
+
   var infoContainer = document.getElementById("info_container");
-  console.log(infoContainer);
   isClickHappen = false;
   isFocusPlanet = true;
   infoContainer.style.display = "none";
 
+  // console.log("=========CENA ANTIGA==================");
+  // console.log(scene.children);
+  // console.log("=========CENA ANTIGA==================");
+
+  scene.children = [];
+
   backupScene.forEach((obj) => scene.add(obj));
-  camera.position.copy(backupCamera.position);
-  camera.lookAt(test);
+
+  // console.log("=========CENA NOVA==================");
+  // console.log(scene.children);
+  // console.log("=========CENA NOVA==================");
 });
 
 function onMouseClick(event) {
+  console.log("VC CLICOU");
   if (!isClickHappen) {
-    isClickHappen = true;
     var raycaster = new THREE.Raycaster();
     var mouse = new THREE.Vector2();
     // Atualizar as coordenadas do mouse
@@ -231,21 +233,22 @@ function onMouseClick(event) {
       if (selectedObject.geometry.type === "RingGeometry") {
         return;
       } else {
+        isClickHappen = true;
         handlePlanetClick(selectedObject);
       }
     }
   }
 }
-
 window.addEventListener("click", onMouseClick, false);
-// Adicionar o evento de passagem do mouse à janela
-// window.addEventListener("mousemove", onMouseMove, false);
 
 window.addEventListener("resize", function () {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
+
+// Adicionar o evento de passagem do mouse à janela
+// window.addEventListener("mousemove", onMouseMove, false);
 
 // function onMouseMove(event) {
 //   // Normalizar as coordenadas do mouse
