@@ -46,8 +46,9 @@ scene.background = cubeTextureLoader.load([
 const orbit = new OrbitControls(camera, renderer.domElement);
 camera.position.set(-90, 140, 140);
 
-const backupCamera = camera;
-// camera.position.setZ(30);
+console.log(camera);
+
+console.log(camera.position);
 
 const ambientLight = new THREE.AmbientLight(0x404040, Math.PI);
 
@@ -56,14 +57,6 @@ directionalLight.position.set(5, 20, 10);
 directionalLight.castShadow = true;
 
 const textureload = new THREE.TextureLoader();
-
-// var auraGeometry = new THREE.SphereGeometry(10, 32, 32);
-// var auraMaterial = new THREE.MeshBasicMaterial({
-//   color: 0x00ffff,
-//   transparent: true,
-//   opacity: 0.3,
-// });
-// var aura = new THREE.Mesh(auraGeometry, auraMaterial);
 
 const sunGeo = new THREE.SphereGeometry(12, 25, 20);
 const sunMat = new THREE.MeshBasicMaterial({
@@ -141,8 +134,8 @@ function animate() {
   //   neptune.planetObj.rotateY(0.001);
   // }
 
-  renderer.render(scene, camera);
   requestAnimationFrame(animate);
+  renderer.render(scene, camera);
 }
 orbit.update();
 
@@ -165,10 +158,6 @@ function handlePlanetClick(planeta) {
   scene.add(directionalLight);
   scene.add(pointLight);
 
-  // planeta.position.x = 0;
-  // planeta.position.y = 0;
-  // planeta.position.z = 0;
-
   // Ajustar a posição da câmera para exibir apenas o planeta clicado
   var newPosition = new THREE.Vector3(
     planeta.position.x + 40,
@@ -181,7 +170,8 @@ function handlePlanetClick(planeta) {
   camera.position.copy(newPosition);
 
   camera.lookAt(planeta.position);
-  // console.log(camera);
+
+  console.log(camera);
 
   isFocusPlanet = false;
 
@@ -199,17 +189,20 @@ resetClick.addEventListener("click", () => {
   isFocusPlanet = true;
   infoContainer.style.display = "none";
 
-  // console.log("=========CENA ANTIGA==================");
-  // console.log(scene.children);
-  // console.log("=========CENA ANTIGA==================");
-
   scene.children = [];
 
   backupScene.forEach((obj) => scene.add(obj));
+  // camera = new THREE.PerspectiveCamera(
+  //   45,
+  //   window.innerWidth / window.innerHeight,
+  //   0.1,
+  //   1000
+  // );
+  camera.position.copy(new THREE.Vector3(-90, 140, 140));
+  camera.lookAt(new THREE.Vector3(0, 0, 0));
+  // renderer.render(scene, camera);
 
-  // console.log("=========CENA NOVA==================");
-  // console.log(scene.children);
-  // console.log("=========CENA NOVA==================");
+  // camera.lookAt(new THREE.Vector3(-90, 140, 140));
 });
 
 function onMouseClick(event) {
@@ -248,25 +241,25 @@ window.addEventListener("resize", function () {
 });
 
 // Adicionar o evento de passagem do mouse à janela
-// window.addEventListener("mousemove", onMouseMove, false);
+window.addEventListener("mousemove", onMouseMove, false);
 
-// function onMouseMove(event) {
-//   // Normalizar as coordenadas do mouse
-//   var mouse = new THREE.Vector2();
-//   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-//   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+function onMouseMove(event) {
+  // Normalizar as coordenadas do mouse
+  var mouse = new THREE.Vector2();
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-//   // Configurar o raio a partir da câmera
-//   var raycaster = new THREE.Raycaster();
-//   raycaster.setFromCamera(mouse, camera);
-//   // Verificar a interseção com os objetos da cena
-//   var intersects = raycaster.intersectObjects(scene.children, true);
+  // Configurar o raio a partir da câmera
+  var raycaster = new THREE.Raycaster();
+  raycaster.setFromCamera(mouse, camera);
+  // Verificar a interseção com os objetos da cena
+  var intersects = raycaster.intersectObjects(scene.children, true);
 
-//   // Verificar se houve alguma interseção
-//   if (intersects.length > 0) {
-//     // Exibir o nome do objeto no console
-//     var selectedObject = intersects[0].object;
-
-//     console.log(selectedObject);
-//   }
-// }
+  // Verificar se houve alguma interseção
+  if (intersects.length > 0) {
+    document.body.style.cursor = "pointer";
+    // Exibir o nome do objeto no console
+  } else {
+    document.body.style.cursor = "auto";
+  }
+}
