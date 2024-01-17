@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import createPlanet from "./pages/lib/Planet";
+import createPlanet from "./pages/lib/planet";
 
 import sunTexture from "/sun.jpg";
 import mercuryTexture from "/mercury.jpg";
@@ -15,7 +15,7 @@ import neptuneTexture from "/neptune.jpg";
 import moonTexture from "/moon.jpg";
 import starsTexture from "/stars.jpg";
 
-import showPlanetInfo from "./planet_info";
+import showPlanetInfo from "./pages/lib/planet_info";
 
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
@@ -116,6 +116,7 @@ function animate() {
   saturn.planet.rotateY(0.01);
   uranus.planet.rotateY(0.01);
   neptune.planet.rotateY(0.01);
+  moon.planet.rotateY(0.003);
 
   if (isFocusPlanet) {
     mercury.planetObj.rotateY(0.001);
@@ -155,6 +156,7 @@ function handlePlanetClick(planeta) {
   scene.add(ambientLight);
   scene.add(directionalLight);
   scene.add(pointLight);
+
   // Ajustar a posição da câmera para exibir apenas o planeta clicado
 
   var newPosition = new THREE.Vector3(
@@ -166,8 +168,11 @@ function handlePlanetClick(planeta) {
   );
 
   camera.position.copy(newPosition);
+  const planetPosition = planeta.getWorldPosition(new THREE.Vector3());
 
-  camera.lookAt(planeta.position);
+  camera.lookAt(planetPosition);
+
+  orbit.enabled = false;
 
   // Exibir informações detalhadas no lado direito
   showPlanetInfo(planeta);
@@ -189,6 +194,7 @@ resetClick.addEventListener("click", () => {
 
   camera.position.copy(new THREE.Vector3(-90, 140, 140));
   camera.lookAt(new THREE.Vector3(0, 0, 0));
+  orbit.enabled = true;
 });
 
 function onMouseClick(event) {
