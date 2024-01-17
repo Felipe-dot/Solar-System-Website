@@ -1,4 +1,4 @@
-import planetsInfo from "./planets_data.js";
+import planetsInfo from "../../planets_data.js";
 
 var infoContainer = document.getElementById("info_container");
 
