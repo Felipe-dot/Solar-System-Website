@@ -71,6 +71,14 @@ const planetsInfo = [
     orbit: "60 190.03 dias",
     day: "16h e 6min",
   },
+  {
+    id: "Lua",
+    description:
+      "A Lua é o único satélite natural da Terra e o quinto maior do Sistema Solar. É o maior satélite natural de um planeta no sistema solar em relação ao tamanho do seu corpo primário, tendo 27% do diâmetro e 60% da densidade da Terra, o que representa 1⁄81 da sua massa. Entre os satélites cuja densidade é conhecida, a Lua é o segundo mais denso, atrás de Io. Estima-se que a formação da Lua tenha ocorrido há cerca de 4,51 mil milhões* de anos, relativamente pouco tempo após a formação da Terra",
+    diameter: "3.474,8 km",
+    orbit: "27.32 dias",
+    day: "27.32 dias",
+  },
 ];
 
 export default planetsInfo;
